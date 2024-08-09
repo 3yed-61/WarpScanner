@@ -2,7 +2,7 @@
 
 install_python() {
     echo "Installing Python..."
-    apt install sudo -y || { echo "Failed to update packages. Exiting."; exit 1; }
+    apt install sudo -y || { echo "Failed to install sudo. Exiting."; exit 1; }
     sudo apt update -y || { echo "Failed to update packages. Exiting."; exit 1; }
     sudo apt install python3 -y || { echo "Failed to install Python. Exiting."; exit 1; }
     sudo apt install python3-pip -y || { echo "Failed to install pip. Exiting."; exit 1; }
