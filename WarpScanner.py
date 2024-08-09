@@ -1532,7 +1532,7 @@ def main2():
 
     {{
     "type": "wireguard",
-    "tag": "Tel=@arshiacomplus Warp-IR1",
+    "tag": "3YED Warp-IR1",
     "local_address": [
         "172.16.0.2/32",
         "{all_key[0]}"
@@ -1551,8 +1551,8 @@ def main2():
     }},
     {{
     "type": "wireguard",
-    "tag": "Tel=@arshiacomplus Warp-Main1",
-    "detour": "Tel=@arshiacomplus Warp-IR1",
+    "tag": "3YED Warp-Main1",
+    "detour": "3YED Warp-IR1",
     "local_address": [
         "172.16.0.2/32",
         "{all_key2[0]}"
@@ -1634,7 +1634,7 @@ def main3():
 
     {{
     "type": "wireguard",
-    "tag": "Tel=@arshiacomplus Warp-IR{wire_c}",
+    "tag": "3YED Warp-IR{wire_c}",
     "local_address": [
         "172.16.0.2/32",
         "{all_key[0]}"
@@ -1653,8 +1653,8 @@ def main3():
     }},
     {{
     "type": "wireguard",
-    "tag": "Tel=@arshiacomplus Warp-Main{wire_c}",
-    "detour": "Tel=@arshiacomplus Warp-IR{wire_c}",
+    "tag": "3YED Warp-Main{wire_c}",
+    "detour": "3YED Warp-IR{wire_c}",
     "local_address": [
         "172.16.0.2/32",
         "{all_key2[0]}"
@@ -1677,7 +1677,7 @@ def main3():
 
     ,{{
     "type": "wireguard",
-    "tag": "Tel=@arshiacomplus Warp-IR{wire_c}",
+    "tag": "3YED Warp-IR{wire_c}",
     "local_address": [
         "172.16.0.2/32",
         "{all_key[0]}"
@@ -1696,8 +1696,8 @@ def main3():
     }},
     {{
     "type": "wireguard",
-    "tag": "Tel=@arshiacomplus Warp-Main{wire_c}",
-    "detour": "Tel=@arshiacomplus Warp-IR{wire_c}",
+    "tag": "3YED Warp-Main{wire_c}",
+    "detour": "3YED Warp-IR{wire_c}",
     
     "local_address": [
         "172.16.0.2/32",
