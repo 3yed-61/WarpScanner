@@ -126,7 +126,7 @@ def info():
     elif whats2=='1':
     	os.system("termux-open-url 'https://t.me/arshia_mod_fun'")
     elif whats2=='2'   :
-    	os.system("termux-open-url 'https://github.com/arshiacomplus/'")
+    	os.system("termux-open-url 'https://github.com/3yed-61/'")
     	
 def check_ipv6():
     
@@ -1801,7 +1801,7 @@ def start_menu():
         "0": "Exit"
     }
 
-    rprint("[bold red]by Telegram= @arshiacomplus[/bold red]")
+    rprint("[bold red]by ₃ƴΞĐ[/bold red]")
     for key, value in options.items():
         rprint(f" [bold yellow]{key}[/bold yellow]: {value}")
     what = Prompt.ask("Choose an option", choices=list(options.keys()), default="0")
