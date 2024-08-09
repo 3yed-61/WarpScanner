@@ -5,6 +5,7 @@ install_python() {
     sudo apt update -y || { echo "Failed to update packages. Exiting."; exit 1; }
     sudo apt install python3 -y || { echo "Failed to install Python. Exiting."; exit 1; }
     sudo apt install python3-pip -y || { echo "Failed to install pip. Exiting."; exit 1; }
+    sudo apt install python3-venv -y || { echo "Failed to install venv. Exiting."; exit 1; }
 }
 
 install_git() {
@@ -22,14 +23,8 @@ install_curl() {
     sudo apt install curl -y || { echo "Failed to install curl. Exiting."; exit 1; }
 }
 
-install_pipx() {
-    echo "Installing pipx..."
-    sudo apt install pipx -y || { echo "Failed to install pipx. Exiting."; exit 1; }
-    pipx ensurepath || { echo "Failed to configure pipx. Exiting."; exit 1; }
-}
-
-# Check and install Python and pip
-if ! command -v python3 &>/dev/null || ! command -v pip3 &>/dev/null; then
+# Check and install Python, pip and venv
+if ! command -v python3 &>/dev/null || ! command -v pip3 &>/dev/null || ! python3 -m venv --help &>/dev/null; then
     install_python
 fi
 
@@ -48,19 +43,20 @@ if ! command -v curl &>/dev/null; then
     install_curl
 fi
 
-# Check and install pipx
-if ! command -v pipx &>/dev/null; then
-    install_pipx
-fi
+# Create a virtual environment
+echo "Creating a virtual environment..."
+python3 -m venv myenv || { echo "Failed to create virtual environment. Exiting."; exit 1; }
 
-# Install Python modules using pipx
-pipx install retrying || { echo "Failed to install retrying module. Exiting."; exit 1; }
-pipx install icmplib || { echo "Failed to install icmplib module. Exiting."; exit 1; }
+# Activate the virtual environment
+source myenv/bin/activate
+
+# Install Python modules in the virtual environment
+pip install retrying icmplib || { echo "Failed to install required modules. Exiting."; deactivate; exit 1; }
 
 # Function to download the latest WarpScanner.py
 download_warp_scanner() {
     echo "Downloading WarpScanner.py..."
-    curl -fsSL -o WarpScanner.py https://raw.githubusercontent.com/3yed-61/WarpScanner/main/WarpScanner.py || { echo "Failed to download WarpScanner.py. Exiting."; exit 1; }
+    curl -fsSL -o WarpScanner.py https://raw.githubusercontent.com/3yed-61/WarpScanner/main/WarpScanner.py || { echo "Failed to download WarpScanner.py. Exiting."; deactivate; exit 1; }
 }
 
 # Check the existence and validity of WarpScanner.py
@@ -74,5 +70,8 @@ else
     download_warp_scanner
 fi
 
-# Run WarpScanner.py using the pipx environment
-pipx run python3 WarpScanner.py
+# Run WarpScanner.py using the virtual environment
+python WarpScanner.py
+
+# Deactivate the virtual environment after execution
+deactivate
