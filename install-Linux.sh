@@ -72,25 +72,25 @@ source myenv/bin/activate || { log_error "Failed to activate virtual environment
 # Install Python modules in the virtual environment
 pip install retrying icmplib || { log_error "Failed to install required modules. Exiting."; deactivate; exit 1; }
 
-# Function to download the latest WarpScanner.py
+# Function to download the latest WarpScanner_Linux.py
 download_warp_scanner() {
-    echo "Downloading WarpScanner.py..."
-    curl -fsSL -o WarpScanner.py https://raw.githubusercontent.com/3yed-61/WarpScanner/main/WarpScanner.py || { log_error "Failed to download WarpScanner.py. Exiting."; deactivate; exit 1; }
+    echo "Downloading WarpScanner_Linux.py..."
+    curl -fsSL -o WarpScanner_Linux.py https://raw.githubusercontent.com/3yed-61/WarpScanner/main/WarpScanner_Linux.py || { log_error "Failed to download WarpScanner_Linux.py. Exiting."; deactivate; exit 1; }
 }
 
-# Check the existence and validity of WarpScanner.py
-if [ -f WarpScanner.py ]; then
-    first_line=$(head -n 1 WarpScanner.py)
+# Check the existence and validity of warpscanner-Linux.py
+if [ -f WarpScanner_Linux.py ]; then
+    first_line=$(head -n 1 WarpScanner_Linux.py)
     if [[ "$first_line" == *"import urllib.request"* || "$first_line" != "V=31" ]]; then
-        rm WarpScanner.py
+        rm WarpScanner_Linux.py
         download_warp_scanner
     fi
 else
     download_warp_scanner
 fi
 
-# Run WarpScanner.py using the virtual environment
-python WarpScanner.py || { log_error "Failed to run WarpScanner.py. Exiting."; deactivate; exit 1; }
+# Run WarpScanner_Linux.py using the virtual environment
+python WarpScanner_Linux.py || { log_error "Failed to run WarpScanner_Linux.py. Exiting."; deactivate; exit 1; }
 
 # Deactivate the virtual environment after execution
 deactivate
