@@ -22,6 +22,12 @@ install_curl() {
     sudo apt install curl -y || { echo "Failed to install curl. Exiting."; exit 1; }
 }
 
+install_pipx() {
+    echo "Installing pipx..."
+    sudo apt install pipx -y || { echo "Failed to install pipx. Exiting."; exit 1; }
+    pipx ensurepath || { echo "Failed to configure pipx. Exiting."; exit 1; }
+}
+
 # Check and install Python and pip
 if ! command -v python3 &>/dev/null || ! command -v pip3 &>/dev/null; then
     install_python
@@ -42,6 +48,15 @@ if ! command -v curl &>/dev/null; then
     install_curl
 fi
 
+# Check and install pipx
+if ! command -v pipx &>/dev/null; then
+    install_pipx
+fi
+
+# Install Python modules using pipx
+pipx install retrying || { echo "Failed to install retrying module. Exiting."; exit 1; }
+pipx install icmplib || { echo "Failed to install icmplib module. Exiting."; exit 1; }
+
 # Function to download the latest WarpScanner.py
 download_warp_scanner() {
     echo "Downloading WarpScanner.py..."
@@ -59,5 +74,5 @@ else
     download_warp_scanner
 fi
 
-# Run WarpScanner.py
-python3 WarpScanner.py
+# Run WarpScanner.py using the pipx environment
+pipx run python3 WarpScanner.py
