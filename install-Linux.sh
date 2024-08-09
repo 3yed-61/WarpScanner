@@ -1,45 +1,120 @@
 #!/bin/bash
 
+# Function to determine the package manager
+detect_package_manager() {
+    if command -v apt-get &> /dev/null; then
+        PM="apt-get"
+    elif command -v yum &> /dev/null; then
+        PM="yum"
+    elif command -v dnf &> /dev/null; then
+        PM="dnf"
+    elif command -v zypper &> /dev/null; then
+        PM="zypper"
+    elif command -v pacman &> /dev/null; then
+        PM="pacman"
+    else
+        echo "Unsupported package manager. Exiting."
+        exit 1
+    fi
+}
+
 install_python() {
     echo "Installing Python..."
-    sudo apt-get update -y || { echo "Failed to update packages. Exiting."; exit 1; }
-    sudo apt-get install python3 python3-pip -y || { echo "Failed to install Python. Exiting."; exit 1; }
+    sudo $PM update -y || { echo "Failed to update packages. Exiting."; exit 1; }
+    
+    case $PM in
+        apt-get)
+            sudo $PM install python3 python3-pip -y ;;
+        yum|dnf)
+            sudo $PM install python3 python3-pip -y ;;
+        zypper)
+            sudo $PM install python3 python3-pip -y ;;
+        pacman)
+            sudo $PM -Sy python python-pip ;;
+        *)
+            echo "Unsupported package manager. Exiting."
+            exit 1
+    esac
 }
 
 install_git() {
     echo "Installing Git..."
-    sudo apt-get install git -y || { echo "Failed to install Git. Exiting."; exit 1; }
+    
+    case $PM in
+        apt-get|yum|dnf|zypper)
+            sudo $PM install git -y ;;
+        pacman)
+            sudo $PM -Sy git ;;
+        *)
+            echo "Unsupported package manager. Exiting."
+            exit 1
+    esac
 }
 
 install_wget() {
     echo "Installing wget..."
-    sudo apt-get install wget -y || { echo "Failed to install wget. Exiting."; exit 1; }
+    
+    case $PM in
+        apt-get|yum|dnf|zypper)
+            sudo $PM install wget -y ;;
+        pacman)
+            sudo $PM -Sy wget ;;
+        *)
+            echo "Unsupported package manager. Exiting."
+            exit 1
+    esac
 }
 
 install_curl() {
     echo "Installing curl..."
-    sudo apt-get install curl -y || { echo "Failed to install curl. Exiting."; exit 1; }
+    
+    case $PM in
+        apt-get|yum|dnf|zypper)
+            sudo $PM install curl -y ;;
+        pacman)
+            sudo $PM -Sy curl ;;
+        *)
+            echo "Unsupported package manager. Exiting."
+            exit 1
+    esac
 }
 
-# Check if Python is installed
+install_retrying() {
+    echo "Checking for the 'retrying' module..."
+    python3 -m pip show retrying &> /dev/null
+    if [ $? -ne 0 ]; then
+        echo "'retrying' module not found. Installing..."
+        pip3 install retrying || { echo "Failed to install 'retrying' module. Exiting."; exit 1; }
+    else
+        echo "'retrying' module is already installed."
+    fi
+}
+
+# Determine the package manager
+detect_package_manager
+
+# Install Python if not already installed
 if ! command -v python3 &> /dev/null || ! command -v pip3 &> /dev/null; then
     install_python
 fi
 
-# Check if Git is installed
+# Install Git if not already installed
 if ! command -v git &> /dev/null; then
     install_git
 fi
 
-# Check if wget is installed
+# Install wget if not already installed
 if ! command -v wget &> /dev/null; then
     install_wget
 fi
 
-# Check if curl is installed
+# Install curl if not already installed
 if ! command -v curl &> /dev/null; then
     install_curl
 fi
+
+# Install the 'retrying' module
+install_retrying
 
 # Check if WarpScanner.py exists and update if necessary
 if [ -f WarpScanner.py ]; then
